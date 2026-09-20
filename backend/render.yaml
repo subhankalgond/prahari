@@ -1,0 +1,33 @@
+# Render.com backend deployment
+# 1. Push this repository to GitHub.
+# 2. Create a new Web Service pointing at the repo.
+# 3. Root directory: backend
+# 4. Build command: npm ci && npm run build
+# 5. Start command: npm start
+# 6. Add the environment variables from .env.example (production values):
+#      NODE_ENV=production
+#      DEMO_MODE=false
+#      DATABASE_URL=<your PostgreSQL connection string>
+#      JWT_SECRET=<openssl rand -hex 32>
+#      CORS_ORIGIN=https://<your-frontend-domain>
+#      PUBLIC_SITE_URL=https://kisanconnect.in
+#      WEATHER_PROVIDER=openweather
+#      WEATHER_API_KEY=<key>
+#      AI_PROVIDER=model
+#      AI_SERVICE_URL=<ai-service-url>
+# 7. Run the seed once from the Render shell: npm run seed
+
+services:
+  - type: web
+    name: kisanconnect-api
+    rootDir: backend
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DEMO_MODE
+        value: false

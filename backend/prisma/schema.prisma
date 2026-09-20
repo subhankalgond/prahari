@@ -1,0 +1,294 @@
+// Prahari database schema (PostgreSQL)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  FARMER
+  ADMIN
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ScanStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum AlertType {
+  DISEASE_RISK
+  PEST_RISK
+  WEATHER
+  GENERAL
+}
+
+enum NotificationType {
+  DISEASE_RISK
+  PEST_RISK
+  WEATHER
+  CROP_REMINDER
+  SYSTEM
+}
+
+enum Severity {
+  LOW
+  MODERATE
+  HIGH
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  mobile       String   @unique
+  email        String?  @unique
+  passwordHash String
+  role         Role     @default(FARMER)
+  language     String   @default("en")
+  state        String
+  district     String
+  taluk        String?
+  village      String?
+  isActive     Boolean  @default(true)
+  lastActiveAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  crops            Crop[]
+  scans            CropScan[]
+  notifications    Notification[]
+  alerts           RiskAlert[]
+  alertReadStates  AlertReadState[]
+  passwordResets   PasswordReset[]
+
+  @@index([mobile])
+}
+
+model PasswordReset {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Crop {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  variety        String?
+  fieldName      String?
+  areaValue      Float
+  areaUnit       String    @default("acre")
+  sowingDate     DateTime
+  harvestDate    DateTime?
+  growthStage    String
+  soilType       String?
+  irrigationType String?
+  location       String?
+  fieldBoundary  Json?
+  healthScore    Int       @default(85)
+  riskLevel      RiskLevel @default(LOW)
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  scans         CropScan[]
+  alerts        RiskAlert[]
+  healthHistory HealthHistory[]
+
+  @@index([userId])
+  @@index([location])
+  @@index([createdAt])
+}
+
+model CropScan {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cropId    String
+  crop      Crop       @relation(fields: [cropId], references: [id], onDelete: Cascade)
+  imageUrl  String?
+  status    ScanStatus @default(PENDING)
+  createdAt DateTime   @default(now())
+
+  result ScanResult?
+
+  @@index([userId])
+  @@index([cropId])
+  @@index([createdAt])
+}
+
+model ScanResult {
+  id         String    @id @default(uuid())
+  scanId     String    @unique
+  scan       CropScan  @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  condition  String
+  isHealthy  Boolean   @default(false)
+  confidence Int
+  severity   Severity?
+  symptoms   Json?
+  causes     Json?
+  actions    Json?
+  prevention Json?
+  provider   String    @default("demo")
+  isDemo     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+
+  @@index([scanId])
+}
+
+model HealthHistory {
+  id          String    @id @default(uuid())
+  cropId      String
+  crop        Crop      @relation(fields: [cropId], references: [id], onDelete: Cascade)
+  healthScore Int
+  riskLevel   RiskLevel
+  createdAt   DateTime  @default(now())
+
+  @@index([cropId])
+  @@index([createdAt])
+}
+
+model Disease {
+  id          String   @id @default(uuid())
+  name        String
+  cropName    String
+  kind        String   @default("DISEASE")
+  description String
+  symptoms    Json
+  causes      Json
+  favorable   Json?
+  prevention  Json
+  management  Json
+  severity    Severity @default(MODERATE)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  images DiseaseImage[]
+
+  @@index([cropName])
+}
+
+model DiseaseImage {
+  id        String  @id @default(uuid())
+  diseaseId String
+  disease   Disease @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String?
+
+  @@index([diseaseId])
+}
+
+model Pest {
+  id          String   @id @default(uuid())
+  name        String
+  cropName    String
+  kind        String   @default("PEST")
+  description String
+  symptoms    Json
+  causes      Json
+  favorable   Json?
+  prevention  Json
+  management  Json
+  severity    Severity @default(MODERATE)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([cropName])
+}
+
+model RiskAlert {
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cropId       String?
+  crop         Crop?     @relation(fields: [cropId], references: [id], onDelete: SetNull)
+  type         AlertType
+  riskLevel    RiskLevel
+  title        String
+  description  String
+  reasons      Json?
+  weatherNote  String?
+  action       String?
+  score        Int?
+  isRead       Boolean   @default(false)
+  isActive     Boolean   @default(true)
+  startsAt     DateTime  @default(now())
+  endsAt       DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([cropId])
+  @@index([createdAt])
+}
+
+model AlertReadState {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  alertKey   String
+  readAt     DateTime  @default(now())
+
+  @@unique([userId, alertKey])
+  @@index([userId])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model WeatherRecord {
+  id          String   @id @default(uuid())
+  locationKey String
+  temperature Float
+  humidity    Int
+  rainfallMm  Float
+  windSpeed   Float
+  condition   String
+  fetchedAt   DateTime @default(now())
+
+  @@index([locationKey])
+  @@index([fetchedAt])
+}
+
+model Recommendation {
+  id        String   @id @default(uuid())
+  cropId    String?
+  title     String
+  body      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([cropId])
+}

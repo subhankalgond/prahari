@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /crops
+Disallow: /scan
+Disallow: /alerts
+Disallow: /profile
+Disallow: /history
+Disallow: /admin
+
+Sitemap: https://prahari.in/sitemap.xml

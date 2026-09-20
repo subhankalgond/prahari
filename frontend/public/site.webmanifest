@@ -1,0 +1,12 @@
+{
+  "name": "Prahari",
+  "short_name": "Prahari",
+  "description": "AI-assisted crop health monitoring for farmers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF9F5",
+  "theme_color": "#047857",
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
