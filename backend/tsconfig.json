@@ -9,5 +9,6 @@
     "types": ["node", "multer"],
     "lib": ["ES2020"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/tests/**/*.ts"]
 }
