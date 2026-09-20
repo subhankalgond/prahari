@@ -34,6 +34,9 @@ export const config = {
   aiServiceUrl: process.env.AI_SERVICE_URL ?? 'http://localhost:8000',
   uploadDir: process.env.UPLOAD_DIR ?? path.resolve(__dirname, '../../uploads'),
   maxUploadBytes: num(process.env.MAX_UPLOAD_MB, 10) * 1024 * 1024,
+  // Keep-alive: deployed backend URL used by the self-ping cron job.
+  // Example: https://your-backend-domain.onrender.com
+  backendUrl: process.env.BACKEND_URL ?? '',
 };
 
 export type AppConfig = typeof config;

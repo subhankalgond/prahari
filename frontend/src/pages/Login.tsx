@@ -143,11 +143,7 @@ export default function Login() {
               </Link>
             </p>
           </div>
-          <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
-            <p className="font-semibold">{t('auth.demoHint')}</p>
-            <p className="mt-1">{t('auth.demoFarmer')}</p>
-            <p>{t('auth.demoAdmin')}</p>
-          </div>
+
         </div>
       </div>
     </div>
