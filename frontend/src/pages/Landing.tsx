@@ -62,10 +62,7 @@ export default function Landing() {
       <section className="max-w-content mx-auto px-4 pt-14 pb-16 md:pt-20 md:pb-20">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="inline-flex items-center rounded-md border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-800">
-              {t('landing.heroBadge')}
-            </p>
-            <h1 className="mt-4 text-4xl md:text-5xl font-bold tracking-tight text-ink-900 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-ink-900 leading-tight">
               {t('landing.heroTitle')}
             </h1>
             <p className="mt-5 text-lg text-ink-600 max-w-xl">{t('landing.heroSubtitle')}</p>

@@ -323,6 +323,26 @@ export const DEMO_CROPS: Crop[] = [
     createdAt: iso(60),
     updatedAt: iso(3),
   },
+  {
+    id: demoId('crop'),
+    userId: DEMO_USER_ID,
+    name: 'Cotton',
+    variety: 'Bollgard',
+    fieldName: 'West Plot',
+    areaValue: 2,
+    areaUnit: 'acre',
+    sowingDate: iso(100),
+    harvestDate: iso(-30),
+    growthStage: 'FRUITING',
+    soilType: 'BLACK',
+    irrigationType: 'RAINFED',
+    location: '12.9716,77.5946',
+    fieldBoundary: null,
+    healthScore: 74,
+    riskLevel: 'MEDIUM',
+    createdAt: iso(100),
+    updatedAt: iso(4),
+  },
 ];
 
 export const DEMO_ALERTS: RiskAlert[] = [

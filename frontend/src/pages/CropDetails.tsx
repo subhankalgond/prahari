@@ -114,6 +114,7 @@ export default function CropDetails() {
             onChange={() => {
               /* read-only on details page */
             }}
+            readOnly
           />
         </div>
       )}

@@ -2,9 +2,8 @@
 
 **Detect Early. Protect Crops. Grow Better.**
 
-AI-assisted crop health monitoring for farmers. Built for Smart India Hackathon
-problem statement **SIH26131**: Early detection and management of crop diseases
-and pest infestations (Agriculture, FoodTech & Rural Development, Software).
+AI-assisted crop health monitoring for farmers: early detection and management
+of crop diseases and pest infestations.
 
 The core idea is not just an image classifier: crop photo + weather + growth
 stage + location feed a transparent risk engine that produces early warnings
@@ -199,4 +198,4 @@ variable list.
 
 ## License
 
-MIT. Built for the Smart India Hackathon 2026.
+MIT.

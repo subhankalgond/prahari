@@ -55,6 +55,7 @@ const en = {
     title: 'Field boundary on satellite imagery',
     draw: 'Draw boundary',
     done: 'Finish drawing',
+    undo: 'Undo last point',
     clear: 'Clear',
     pointsSet: 'Boundary saved with {{count}} points',
     hint: 'Tap Draw boundary, then tap the map at least 3 times around your field',
@@ -109,7 +110,6 @@ const en = {
     micError: 'Did not catch that. Tap the mic and try again.',
   },
   landing: {
-    heroBadge: 'Built for Smart India Hackathon SIH26131',
     heroTitle: 'Detect Early. Protect Crops. Grow Better.',
     heroSubtitle:
       'Prahari combines a crop photo, weather and growth stage to flag disease and pest risks early, in your language.',

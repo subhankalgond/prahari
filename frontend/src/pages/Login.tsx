@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Sprout, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { api } from '../lib/api';
 import { useToast } from '../contexts/ToastContext';
 import { Button } from '../components/ui';
 import { LanguageSelect } from '../components/LanguageSelect';
@@ -20,6 +21,23 @@ export default function Login() {
   const [remember, setRemember] = useState(true);
   const [errors, setErrors] = useState<{ identifier?: string; password?: string; form?: string }>({});
   const [submitting, setSubmitting] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+
+  // Show the demo credentials hint only when the backend runs in demo mode.
+  useEffect(() => {
+    let active = true;
+    api
+      .get<{ demoMode?: boolean }>('/api/health')
+      .then((h) => {
+        if (active) setIsDemoMode(Boolean(h.demoMode));
+      })
+      .catch(() => {
+        /* backend unreachable: hide the hint */
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const from = (location.state as { from?: string } | null)?.from ?? '/dashboard';
 
@@ -143,7 +161,13 @@ export default function Login() {
               </Link>
             </p>
           </div>
-
+          {isDemoMode && (
+            <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+              <p className="font-semibold">{t('auth.demoHint')}</p>
+              <p className="mt-1">{t('auth.demoFarmer')}</p>
+              <p>{t('auth.demoAdmin')}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
