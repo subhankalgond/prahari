@@ -27,6 +27,9 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET ?? 'dev-only-secret-change-in-production',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
   demoMode: bool(process.env.DEMO_MODE, true),
+  // Show the demo credentials box on the login page even in production mode
+  // (after the demo accounts have been seeded into the real database).
+  showDemoHint: bool(process.env.SHOW_DEMO_HINT, false),
   databaseUrl: process.env.DATABASE_URL ?? '',
   weatherProvider: (process.env.WEATHER_PROVIDER ?? 'demo').toLowerCase(),
   weatherApiKey: process.env.WEATHER_API_KEY ?? '',

@@ -18,8 +18,10 @@ export function createApp(store: DataStore): Express {
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
-      message: 'Backend is running',
-      timestamp: new Date().toISOString(),
+      service: 'prahari-api',
+      demoMode: config.demoMode,
+      showDemoHint: config.showDemoHint,
+      time: new Date().toISOString(),
     });
   });
 

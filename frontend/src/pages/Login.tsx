@@ -22,14 +22,20 @@ export default function Login() {
   const [errors, setErrors] = useState<{ identifier?: string; password?: string; form?: string }>({});
   const [submitting, setSubmitting] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(false);
+  const [showAdminHint, setShowAdminHint] = useState(false);
 
-  // Show the demo credentials hint only when the backend runs in demo mode.
+  // Show the demo credentials hint when the backend announces it
+  // (demo mode, or production with SHOW_DEMO_HINT=true after seeding).
+  // The admin line only appears in demo mode: in production the real admin
+  // has a private password that the hint must not advertise.
   useEffect(() => {
     let active = true;
     api
-      .get<{ demoMode?: boolean }>('/api/health')
+      .get<{ demoMode?: boolean; showDemoHint?: boolean }>('/api/health')
       .then((h) => {
-        if (active) setIsDemoMode(Boolean(h.demoMode));
+        if (!active) return;
+        setIsDemoMode(Boolean(h.showDemoHint));
+        setShowAdminHint(Boolean(h.demoMode));
       })
       .catch(() => {
         /* backend unreachable: hide the hint */
@@ -165,7 +171,7 @@ export default function Login() {
             <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
               <p className="font-semibold">{t('auth.demoHint')}</p>
               <p className="mt-1">{t('auth.demoFarmer')}</p>
-              <p>{t('auth.demoAdmin')}</p>
+              {showAdminHint && <p>{t('auth.demoAdmin')}</p>}
             </div>
           )}
         </div>

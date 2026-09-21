@@ -99,7 +99,16 @@ content appears, and the login screen lists the demo accounts:
    ADMIN_EMAIL=admin@yourdomain.in ADMIN_PASSWORD=<strong password> npm run seed
    ```
 
+   The seed also creates a presentation demo farmer (`9876543210` /
+   `Demo@12345`) with four demo crops, alerts and notifications in the real
+   database, so the demo login works alongside real accounts. It is
+   idempotent: re-running never duplicates data and never touches the real
+   admin's password.
+
 5. Set `DEMO_MODE=false` and restart.
+
+6. Optional: set `SHOW_DEMO_HINT=true` to show the demo farmer credentials
+   on the login page in production mode (for presentations).
 
 Registration always creates FARMER accounts; admins exist only via the seed.
 
